@@ -9,7 +9,11 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 90f;
     public float playerSpeed = 10f;
     public float jumpForce = 10f;
-
+    public GameObject PortalA;
+    public GameObject PortalB;
+    public GameObject Player;
+    public GameObject SpawnPointA;
+    public GameObject SpawnPointB;
 
 
     private Vector3 targetPosition;
@@ -33,6 +37,11 @@ public class PlayerController : MonoBehaviour
         if (Input.mousePosition != prevoiusMousePosition)
         {
             rotateCamera();
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            setPortalA();
         }
 
         if (Input.GetKey(KeyCode.W))
@@ -107,12 +116,62 @@ public class PlayerController : MonoBehaviour
         PlayerRB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
+    private void setPortalA()
+    {
+        var Ray = PlayerCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(Ray, out hit))
+        {
+            targetPosition = hit.point;
+            if (hit.collider.gameObject.tag == "Ground")
+            {
+                Vector3 lookDirection = targetPosition - transform.position;
+                var rotation = Quaternion.LookRotation(lookDirection).eulerAngles;
+                PortalA.transform.rotation = Quaternion.Euler(0, rotation.y+90f,0);
+                Vector3 positionNormalized = new Vector3(targetPosition.x, targetPosition.y + 1.8f, targetPosition.z);
+                PortalA.transform.position = positionNormalized;
+                
+            }
+            
+        }
+    }
+
+    private void setPortalB()
+    {
+        var Ray = PlayerCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(Ray, out hit))
+        {
+            targetPosition = hit.point;
+            if (hit.collider.gameObject.tag == "Enemy")
+            {
+                Destroy(hit.collider.gameObject);
+            }
+            Debug.Log(targetPosition.ToString());
+        }
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
             isJumping = false;
+
+        }
+        if (collision.gameObject.tag == "PortalA")
+        {
+            Vector3 positionNormalized = new Vector3(SpawnPointB.transform.position.x, SpawnPointB.transform.position.y - 2f, SpawnPointB.transform.position.z);
+            transform.position =positionNormalized;
+            transform.rotation = SpawnPointB.transform.rotation;
+
+
+        }
+        if (collision.gameObject.tag == "PortalB")
+        {
+            Vector3 positionNormalized = new Vector3(SpawnPointA.transform.position.x, SpawnPointA.transform.position.y - 2f, SpawnPointA.transform.position.z);
+            transform.position = positionNormalized;
+            transform.rotation = SpawnPointA.transform.rotation;
 
         }
 
