@@ -3,28 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PortalCameraController : MonoBehaviour
-{
-	//public Transform playerCamera;
-	//public Transform portal;
-	//public Transform otherPortal;
-
-	//// Update is called once per frame
-	//void Update()
-	//{
-	//	Vector3 playerOffsetFromPortal = playerCamera.position - otherPortal.position;
-	//	transform.position = portal.position - playerOffsetFromPortal;
-
-	//	float angularDifferenceBetweenPortalRotations = Quaternion.Angle(portal.rotation, Quaternion.Inverse(otherPortal.rotation));
-
-	//	Quaternion portalRotationalDifference = Quaternion.AngleAxis(angularDifferenceBetweenPortalRotations, Vector3.up);
-	//	Vector3 newCameraDirection = portalRotationalDifference * playerCamera.forward;
-
-	//	float y = newCameraDirection.y;
-	//	Vector3 newCameraCorrectDirection = new Vector3(newCameraDirection.x,y,newCameraDirection.z);
-
-	//	transform.rotation = Quaternion.LookRotation(newCameraCorrectDirection , Vector3.up);
-	//}
-	
+{	
 
 	public PortalCameraController linkedPortal;
 	public MeshRenderer screen;
